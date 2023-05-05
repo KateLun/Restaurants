@@ -30,7 +30,7 @@ const Footer = () => {
                     </button>
                    
                 </div>
-                <p class="pt-2 text-base leading-6 text-center text-gray-400">
+                <p className="pt-2 text-base leading-6 text-center text-gray-400">
                     © 2023 SomeCompany, Inc. All rights reserved.
                 </p>
             </div>

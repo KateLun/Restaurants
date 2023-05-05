@@ -1,46 +1,41 @@
 import { useState } from "react";
 import { useEffect} from "react";
 import { useParams } from "react-router-dom";
+import classNames from "classnames";
+//import {createContext} from "react";
 import "components/RestaurantPage/menu.css";
-import Button from "components/Button";
 
-function RestaurantPage() {
+function RestaurantPage( ) {
     
     const { slug } = useParams()
 
     const [ rest, setRest ] = useState({})
-    const [ menu, setMenu ] = useState([])
 
     useEffect(() => {
         fetch(`https://www.bit-by-bit.ru/api/student-projects/restaurants/${slug}`)
         .then(res => res.json())
         .then(data => setRest(data))
-        console.log(rest)
     }, [slug])
+
+    const [ menu, setMenu ] = useState([])
 
     useEffect(() => {
         fetch(`https://www.bit-by-bit.ru/api/student-projects/restaurants/${slug}/items`)
         .then(res => res.json())
         .then(data => setMenu(data))
+        //.then(menu.forEach((element) => { element.isAdded = "false"}))
     }, [slug])
 
-    const [count, setCount] = useState(1)
+    const [ cart, setCart ] = useState()
 
-    function plus() { 
-        if (count < 10) {
-            setCount(count + 1) 
-        } else {
-            return
-        }
+    const changedCart = (id) => {
+        const copyMenu = [...menu]
+        const status = copyMenu.find( (item) => item.id === id)
+        status.isAdded = !status.isAdded
+        setCart(copyMenu.filter((item) => item.isAdded))
+        console.log(cart) 
     }
 
-    function minus() { 
-        if (count > 0) {
-            setCount(count - 1) 
-        } else {
-            return
-        }
-    }
 
     return (
        <div className="max-w-screen-lg m-auto my-10">
@@ -60,7 +55,7 @@ function RestaurantPage() {
                         <p className="text-xl text-gray-600 text-justify pt-2">{rest.description}</p>
                     </div>
                     <div className="w-2/3 flex justify-center">
-                        <img className="w-4/5 object-center" src={rest.image} alt="rest-img" />
+                        <img className="w-72 h-96 object-cover object-center" src={rest.image} alt="rest-img" />
                     </div>
                 </div>
                 <div className="flex flex-row justify-around border-t-2 pt-6 mt-4">
@@ -108,14 +103,19 @@ function RestaurantPage() {
 
                                 <p className="recipe-desc">{item.description}</p>
 
-                                <div className="flex flex-row justify-between mt-6">
-                                    <div className="flex flex-row" >
-                                        <button onClick={minus} className="mx-2 py-1 px-2 font-bold">-</button>
-                                        <p className="py-1 px-2">{count} шт.</p>
-                                        <button onClick={plus} className="mx-2 py-1 px-2 font-bold">+</button>
-                                    </div>
-                                    <p className="py-1 px-6 border rounded-md">{count*item.price}</p>
-                                    <Button title="В корзину" />
+                                <div className="flex flex-row justify-end mt-6">
+                                    <button 
+                                        className={classNames(
+                                            "mx-1 rounded-lg text-xl text-white px-4 py-1 shadow-md font-semibold cursor-pointer hover:bg-stone-500",
+                                            {
+                                                "bg-fuchsia-400": !item.isAdded,
+                                                "bg-fuchsia-700": item.isAdded,
+                                            }
+                                    )}
+                                        onClick={() => changedCart(item.id)}
+                                    >
+                                        {item.isAdded ? "Добавлено!" : "В корзину"}
+                                    </button>
                                 </div>
 
                             </div>
