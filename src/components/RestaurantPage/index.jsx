@@ -25,12 +25,13 @@ function RestaurantPage( ) {
         .then(data => setMenu(data))
         .then(menu.forEach((element) => { element.quantity = 1 }))
         //.then(menu.forEach((element) => { element.isAdded = "false"}))
-    }, [slug])
+    }, [slug, menu])
 
     const changeCart = (id) => { //КАК В МАССИВ С КОРЗИНОЙ ДОБАВИТЬ КОЛИЧЕСТВО, КОТОРОЕ ВЫБРАЛ ПОЛЬЗОВАТЕЛЬ??
         const copyMenu = [...menu]
         const status = copyMenu.find( (item) => item.id === id)
-        status.quantity = count
+        const amount = copyMenu.find( (item) => item.id === id)
+        amount.quantity = count
         status.isAdded = !status.isAdded
         setCart(copyMenu.filter((item) => item.isAdded))
     }

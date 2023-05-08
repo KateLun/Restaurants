@@ -13,9 +13,9 @@ function CartPage() {
 
     }, [])
 
-    const [count, setCount] = useState(1) 
+    //const [count, setCount] = useState(1) 
 
-    const plus = (id) => { 
+    /*const plus = (id) => { 
         if (count < 10) {
             setCount(count + 1) 
         } else {
@@ -29,7 +29,7 @@ function CartPage() {
         } else {
             return
         }
-    }
+    }*/
 
 
     const deleteItem = (id) => {
@@ -37,9 +37,6 @@ function CartPage() {
         localStorage.setItem("cart", JSON.stringify(cart)) // НЕ КОРРЕКТНО РАБОТАЕТ LS, ПРИ УДАЛЕНИИ ТОВАРА И ОБНОВЛЕНИИ СТРАНИЦЫ -
                                                               //ПОСЛЕДНИЙ УДАЛЕННЫЙ ТОВАР ОСТАЕТСЯ В КОРЗИНЕ
     }
-
-    const [isModal, setModal] = useState(false)
-    const onClose = () => setModal(false)
 
     return (
         <div className="max-w-screen-lg m-auto my-10">
