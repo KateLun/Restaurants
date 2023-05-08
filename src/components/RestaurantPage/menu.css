@@ -12,7 +12,7 @@
 
 .pizza-box {
 	flex: 3 1 30ch;
-	height: calc(240px + 5vw);
+	height: calc(180px + 5vw);
 	overflow: hidden;
 }
 .menu-img {
@@ -78,9 +78,10 @@ body {
 	font-family: "Roboto", Helvetica, Arial, sans-serif;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
     .recipe {
         flex-direction: column;
         margin: 10px 5px;
     }
+    
 }

@@ -16,15 +16,15 @@ function HomePage() {
     return (
         <div className="max-w-screen-lg m-auto my-10" >
             {rest.length === 0 && (
-            <div class=" m-auto my-72 h-16 w-16 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
-            <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+            <div className=" m-auto my-72 h-16 w-16 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
             </div>
             )}
 
             <div className="grid grid-cols-2 px-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" >
                 {rest.length > 0 && rest.map((item) => {
                     return (
-                        <Link to={`/rectaurant/${item.slug}`} class="group relative block bg-black">
+                        <Link to={`/rectaurant/${item.slug}`} className="group relative block bg-black">
                             <img
                                 alt="foodr"
                                 src={item.image}

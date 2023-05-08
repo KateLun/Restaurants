@@ -4,7 +4,7 @@ const Header = () => {
 
     return (
         <header className="bg-zinc-50 shadow-md">
-                <nav className="max-w-screen-lg m-auto flex flex-row justify-between font-semibold text-lg class"> 
+                <nav className="max-w-screen-lg m-auto flex flex-row justify-between font-semibold text-lg"> 
                     <div className="flex flex-row gap-5 mx-4 font-semibold text-sm sm:text-lg">
                         <p className="p-4 border-b-2 text-stone-800 border-cyan-300 border-opacity-0 hover:border-opacity-100 hover:text-cyan-300 duration-200 cursor-pointer active"> О нас</p>
                         <Link to={"/"} className="p-4 border-b-2 text-stone-800 border-cyan-300 border-opacity-0 hover:border-opacity-100 hover:text-cyan-300 duration-200 cursor-pointer active">Выбор ресторана</Link>

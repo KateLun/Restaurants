@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useEffect} from "react";
 import { useParams } from "react-router-dom";
 import classNames from "classnames";
-//import {createContext} from "react";
 import "components/RestaurantPage/menu.css";
 
 function RestaurantPage( ) {
@@ -10,6 +9,9 @@ function RestaurantPage( ) {
     const { slug } = useParams()
 
     const [ rest, setRest ] = useState({})
+    const [ menu, setMenu ] = useState([])
+    const [ cart, setCart ] = useState([])
+    const [ count, setCount ] = useState(1)
 
     useEffect(() => {
         fetch(`https://www.bit-by-bit.ru/api/student-projects/restaurants/${slug}`)
@@ -17,33 +19,50 @@ function RestaurantPage( ) {
         .then(data => setRest(data))
     }, [slug])
 
-    const [ menu, setMenu ] = useState([])
-
     useEffect(() => {
         fetch(`https://www.bit-by-bit.ru/api/student-projects/restaurants/${slug}/items`)
         .then(res => res.json())
         .then(data => setMenu(data))
+        .then(menu.forEach((element) => { element.quantity = 1 }))
         //.then(menu.forEach((element) => { element.isAdded = "false"}))
     }, [slug])
 
-    const [ cart, setCart ] = useState()
-
-    const changedCart = (id) => {
+    const changeCart = (id) => { //КАК В МАССИВ С КОРЗИНОЙ ДОБАВИТЬ КОЛИЧЕСТВО, КОТОРОЕ ВЫБРАЛ ПОЛЬЗОВАТЕЛЬ??
         const copyMenu = [...menu]
         const status = copyMenu.find( (item) => item.id === id)
+        status.quantity = count
         status.isAdded = !status.isAdded
         setCart(copyMenu.filter((item) => item.isAdded))
-        console.log(cart) 
     }
 
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart))
+        //console.log(cart) 
+    }, [cart])
+
+    const plus = (id) => { 
+        if (count < 10) {
+            setCount(count + 1) 
+        } else {
+            return
+        }
+    }
+
+    const minus = (id) => { 
+        if (count > 0) {
+            setCount(count - 1) 
+        } else {
+            return
+        }
+    }
 
     return (
        <div className="max-w-screen-lg m-auto my-10">
 
         
             {menu.length === 0 && (
-                <div class=" m-auto my-72 h-16 w-16 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
-                <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+                <div className=" m-auto my-72 h-16 w-16 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+                <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
                 </div>
             )}
 
@@ -58,7 +77,7 @@ function RestaurantPage( ) {
                         <img className="w-72 h-96 object-cover object-center" src={rest.image} alt="rest-img" />
                     </div>
                 </div>
-                <div className="flex flex-row justify-around border-t-2 pt-6 mt-4">
+                <div className="flex flex-col md:flex-row justify-around border-t-2 pt-6 mt-4">
                     <div className="flex flex-row gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
@@ -81,7 +100,7 @@ function RestaurantPage( ) {
                 </div>
             </div>
 
-            <div className="text-center mt-24 mb-16 text-5xl font-bold text-slate-600 underline decoration-6 underline-offset-8 decoration-cyan-300">НАШЕ МЕНЮ</div>
+            <div className="text-center mt-8 md:mt-24 mb-12 md:mb-16 text-xl md:text-5xl font-bold text-slate-600 underline decoration-6 underline-offset-8 decoration-cyan-300">НАШЕ МЕНЮ</div>
 
             {menu.length > 0 && menu.map((item) => {
                 return (
@@ -104,6 +123,12 @@ function RestaurantPage( ) {
                                 <p className="recipe-desc">{item.description}</p>
 
                                 <div className="flex flex-row justify-end mt-6">
+                                    <div className="flex flex-row border rounded-md p-2 text-xl" >
+                                        <button onClick={() => minus(item.id)} className="mx-2 py-1 px-2 font-bold">-</button>
+                                        <p className="py-1 px-2">{count} шт.</p>
+                                        <button onClick={() => plus(item.id)} className="mx-2 py-1 px-2 font-bold">+</button>
+                                    </div>
+                                    <p className="py-1 px-6 text-xl">{new Intl.NumberFormat('ru').format(count*item.price)}</p>
                                     <button 
                                         className={classNames(
                                             "mx-1 rounded-lg text-xl text-white px-4 py-1 shadow-md font-semibold cursor-pointer hover:bg-stone-500",
@@ -112,9 +137,9 @@ function RestaurantPage( ) {
                                                 "bg-fuchsia-700": item.isAdded,
                                             }
                                     )}
-                                        onClick={() => changedCart(item.id)}
+                                        onClick={() => changeCart(item.id)}
                                     >
-                                        {item.isAdded ? "Добавлено!" : "В корзину"}
+                                        {item.isAdded ? "Удалить" : "В корзину"}
                                     </button>
                                 </div>
 
