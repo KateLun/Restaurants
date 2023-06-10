@@ -11,7 +11,7 @@ function Counter ( {menuItem, cartItems, setCartItems} ) {
         if (flag === 1) {
             //if(cartItems > 0 && cartItems[0].restaurantId === menuItem.restaurantId) { //НЕ РАБОТАЕТ, НО БЕЗ ЭТОГО КОДА 
             //ПРИ ПРОСТОМ ПЕРЕХОДЕ НА СТРАНИЦУ ДРУГОГО РЕСТОРАНА ОБНУЛЯЕТСЯ КОРЗИНА???
-                const newCartItem = {...menuItem, quantity: count, status: !isAdded}
+                const newCartItem = {...menuItem, quantity: count, status: setIsAdded(true)}
                 setCartItems([...cartItems, newCartItem])
                 setFlag(2)
             //} else {
@@ -20,7 +20,6 @@ function Counter ( {menuItem, cartItems, setCartItems} ) {
         } else {
             const newCartItems = cartItems.filter(item => item.status = isAdded) //новый массив без того продукта, на который пользователь нажал "удалить"
             setCartItems(newCartItems)
-            setIsAdded(true)
             setFlag(1)
         }
     }
