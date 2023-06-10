@@ -55,7 +55,7 @@
     flex-direction: row;
 }
 .recipe-votes {
-	font-size: .825em;
+	font-size: 1.025em;
 	font-style: italic;
 	color: var(--lightgrey);
 }
