@@ -20,6 +20,7 @@ function Counter ( {menuItem, cartItems, setCartItems} ) {
         } else {
             const newCartItems = cartItems.filter(item => item.status = isAdded) //новый массив без того продукта, на который пользователь нажал "удалить"
             setCartItems(newCartItems)
+            setIsAdded(true)
             setFlag(1)
         }
     }
